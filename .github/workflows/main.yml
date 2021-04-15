@@ -36,7 +36,8 @@ jobs:
         PORT: 22
         KEY: ${{ secrets.SSHKEY }}
         script: |
-          cd /root/cloudComputing/
+          cd /root/cloudComputing/pr_part1
           python3 pr1.py3
           python3 pr2.py3
+          cd /root/cloudComputing/pr_part2
           python3 pr3.py3
