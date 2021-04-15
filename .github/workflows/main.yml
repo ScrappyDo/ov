@@ -1,0 +1,42 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+        
+    - name: Scp copy
+      uses: appleboy/scp-action@master
+      env:
+        HOST: ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USERNAME }}
+        PORT: 22
+        KEY: ${{ secrets.SSHKEY }}
+      with:
+        source: "pr_part1/pr*.py3, pr_part2/pr*.py3 "
+        target: "/root/cloudComputing"
+
+    - name: Executing remote command
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USERNAME }}
+        PORT: 22
+        KEY: ${{ secrets.SSHKEY }}
+        script: |
+          cd /root/cloudComputing/
+          python3 pr1.py3
+          python3 pr2.py3
+          python3 pr3.py3
